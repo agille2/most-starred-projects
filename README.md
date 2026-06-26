@@ -79,3 +79,9 @@ If you are using GitHub Codespaces, make sure your Vite server is accessible fro
 ## License
 
 This project is licensed under MIT. See `LICENSE` for details.
+
+## Screenshots
+<img width="967" height="747" alt="GitHubProjectsLaravel" src="https://github.com/user-attachments/assets/cc958f94-cf2f-4b58-8607-1d7a9121a6b7" />
+<img width="1025" height="735" alt="GitHubSingleProjectLaravel" src="https://github.com/user-attachments/assets/158e7d60-3d6d-4ff7-b9b8-66250e9e4f7f" />
+
+

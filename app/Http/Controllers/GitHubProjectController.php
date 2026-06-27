@@ -10,15 +10,18 @@ use Illuminate\View\View;
 
 class GitHubProjectController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $this->syncProjects();
+        $perPage = in_array((int) $request->query('per_page', 5), [5, 10, 25], true)
+            ? (int) $request->query('per_page', 5)
+            : 5;
 
         $projects = GitHubProject::query()
             ->orderByDesc('num_stars')
-            ->get();
+            ->paginate($perPage)->withPath('')
+            ->appends($request->query());
 
-        return view('github-projects', compact('projects'));
+        return view('github-projects', compact('projects', 'perPage'));
     }
 
     public function refresh(): RedirectResponse
@@ -39,7 +42,7 @@ class GitHubProjectController extends Controller
             'q' => 'language:php',
             'sort' => 'stars',
             'order' => 'desc',
-            'per_page' => 10,
+            'per_page' => 25,
         ]);
 
         if (! $response->successful()) {

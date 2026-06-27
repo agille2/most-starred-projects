@@ -27,7 +27,19 @@
             </div>
         @endif
 
-        <div class="mt-8 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-lg">
+        <div class="mt-8 flex flex-wrap items-center justify-between gap-3">
+            <div class="text-sm text-slate-400">Showing {{ $perPage }} items per page</div>
+            <form method="GET" action="{{ route('github.projects', [], false) }}" class="flex items-center gap-2">
+                <label for="per_page" class="text-sm text-slate-400">Page size</label>
+                <select id="per_page" name="per_page" onchange="this.form.submit()" class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100">
+                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                </select>
+            </form>
+        </div>
+
+        <div class="mt-4 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-lg">
             <table class="min-w-full divide-y divide-slate-800">
                 <thead class="bg-slate-800/80">
                     <tr>
@@ -52,6 +64,33 @@
                     @endforelse
                 </tbody>
             </table>
+
+            @if ($projects->hasPages())
+                <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
+                    <div>
+                        Showing {{ $projects->firstItem() }}-{{ $projects->lastItem() }} of {{ $projects->total() }} projects
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        @if ($projects->onFirstPage())
+                            <span class="rounded border border-slate-700 px-3 py-1 text-slate-500">Previous</span>
+                        @else
+                            <a href="{{ $projects->previousPageUrl() }}" class="rounded border border-slate-700 px-3 py-1 hover:bg-slate-800">Previous</a>
+                        @endif
+
+                        @foreach ($projects->getUrlRange(1, $projects->lastPage()) as $page => $url)
+                            <a href="{{ $url }}" class="rounded border px-3 py-1 {{ $page == $projects->currentPage() ? 'border-sky-500 bg-sky-500/20 text-sky-300' : 'border-slate-700 text-slate-300 hover:bg-slate-800' }}">
+                                {{ $page }}
+                            </a>
+                        @endforeach
+
+                        @if ($projects->hasMorePages())
+                            <a href="{{ $projects->nextPageUrl() }}" class="rounded border border-slate-700 px-3 py-1 hover:bg-slate-800">Next</a>
+                        @else
+                            <span class="rounded border border-slate-700 px-3 py-1 text-slate-500">Next</span>
+                        @endif
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </body>

@@ -51,7 +51,7 @@
                     @forelse ($projects as $project)
                         <tr class="hover:bg-slate-800/60">
                             <td class="px-4 py-3 text-sm text-slate-200">
-                                <a href="{{ route('github.projects.show', $project, false) }}" class="font-medium text-sky-400 hover:text-sky-300">
+                                <a href="{{ route('github.projects.show', $project, false) }}" data-details-url="{{ route('github.projects.show.json', $project, false) }}" class="project-detail-link font-medium text-sky-400 hover:text-sky-300">
                                     {{ $project->name }}
                                 </a>
                             </td>
@@ -92,6 +92,7 @@
                 </div>
             @endif
         </div>
+        <div id="project-details-overlay"></div>
     </div>
 </body>
 </html>

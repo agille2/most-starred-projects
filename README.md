@@ -5,7 +5,8 @@ This application displays the most-starred public PHP projects from GitHub and s
 ## Features
 
 - Landing page shows a list of GitHub PHP projects
-- Detail page for each project
+- Click a project to open a Vue-powered detail overlay without a full page reload
+- Detail page still accessible directly via `/github-projects/{project}`
 - Refresh project data from GitHub using a manual refresh endpoint
 - Uses Laravel for backend routing and data persistence
 - Uses Vite to compile frontend assets

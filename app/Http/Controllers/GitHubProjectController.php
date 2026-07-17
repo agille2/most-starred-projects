@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GitHubProject;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -29,6 +30,21 @@ class GitHubProjectController extends Controller
         $this->syncProjects();
 
         return redirect()->route('github.projects')->with('status', 'GitHub data refreshed.');
+    }
+
+    public function showJson(GitHubProject $project): JsonResponse
+    {
+        return response()->json([
+            'project' => [
+                'name' => $project->name,
+                'description' => $project->description,
+                'url' => $project->url,
+                'repoId' => $project->repoId,
+                'num_stars' => $project->num_stars,
+                'created_date' => optional($project->created_date)->format('Y-m-d'),
+                'last_push_date' => optional($project->last_push_date)->format('Y-m-d'),
+            ],
+        ]);
     }
 
     public function show(GitHubProject $project): View

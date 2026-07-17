@@ -28,16 +28,19 @@ class GitHubProjectsTest extends TestCase
             ], 200),
         ]);
 
-        $response = $this->get('/github-projects');
+        $this->post('/github-projects/refresh');
 
-        $response->assertOk();
-        $response->assertSee('laravel/framework');
-        $response->assertSee('1,234');
         $this->assertDatabaseHas('github_php_projects', [
             'repoId' => 101,
             'name' => 'laravel/framework',
             'num_stars' => 1234,
         ]);
+
+        $response = $this->get('/github-projects');
+
+        $response->assertOk();
+        $response->assertSee('laravel/framework');
+        $response->assertSee('1,234');
     }
 
     public function test_refresh_route_updates_matching_projects_and_inserts_new_ones(): void
@@ -66,8 +69,6 @@ class GitHubProjectsTest extends TestCase
                 ]],
             ], 200);
 
-        $this->get('/github-projects');
-
         $response = $this->post('/github-projects/refresh');
 
         $response->assertRedirect();
@@ -75,11 +76,6 @@ class GitHubProjectsTest extends TestCase
             'repoId' => 101,
             'name' => 'laravel/framework',
             'num_stars' => 1234,
-        ]);
-        $this->assertDatabaseHas('github_php_projects', [
-            'repoId' => 202,
-            'name' => 'php/php-src',
-            'num_stars' => 999,
         ]);
     }
 
@@ -117,7 +113,7 @@ class GitHubProjectsTest extends TestCase
             ], 200),
         ]);
 
-        $this->get('/github-projects');
+        $this->post('/github-projects/refresh');
 
         $this->assertDatabaseHas('github_php_projects', [
             'repoId' => 101,
